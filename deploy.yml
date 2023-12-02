@@ -1,0 +1,39 @@
+# apiVersion: apps/v1
+apiVersion: v2
+kind: Deployment  # kind of resource we want to create ex: replica, pod, 
+metadata:  # to identify the object ex: job
+  name: nodejs-backend
+spec: #desired state
+  containers:
+  - name: nginx
+    image: nginx:1.14.2
+    ports:
+    - containerPort: 80
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-app
+spec:
+  selector:
+    matchLabels:
+      app: nodejs-app
+  template:
+    metadata:
+      labels:
+        app: nodejs-app
+    spec:
+      containers:
+      - name: microservice1
+        image: microservice1:latest
+        ports:
+        - containerPort: 3000
+        - targetPort: 3000
+        - port: 3000
+      - name: microservice3
+        image: microservice3:latest
+        ports:
+        - containerPort: 3002
+        - targetPort: 3002
+        - port: 3002
+  replicas: 4
